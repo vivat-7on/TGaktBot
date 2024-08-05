@@ -1,41 +1,29 @@
-import os
+import asyncio
+import logging
 
-from aiogram import Bot, Dispatcher, F
-from aiogram.filters import Command
-from aiogram.types import Message
-from dotenv import load_dotenv
+from aiogram import Bot, Dispatcher
 
-load_dotenv()
+from config_data.config import Config, load_config
+from handlers.handlers import main_router
 
-BOT_TOKEN = os.getenv("TOKEN")
-
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
+logger = logging.getLogger(__name__)
 
 
-@dp.message(Command(commands=["start"]))
-async def process_start_command(message: Message):
-    await message.answer(
-        'Привет!\nЯ полезный телеграм бот!\nПришли мне pdf файл\n'
-        'и я разделю его для тебя на страницы\nи корвертирую их в jpg')
-
-
-@dp.message(Command(commands=['help']))
-async def process_help_command(message: Message):
-    await message.answer(
-        'Пришли мне pdf файл и посмотри что будет'
+async def main():
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(filename)s:%(lineno)d #%(levelname)-8s '
+               '[%(asctime)s] - %(name)s - %(message)s'
     )
 
-@dp.message(F.document)
-async def send_files(message: Message):
-    file = message.document
-    await message.answer_document(file.file_id)
+    logger.info('Starting bot')
 
-@dp.message()
-async def process_help_command(message: Message):
-    await message.answer(
-        'Лучше покажи мне твой акт...'
-    )
+    config: Config = load_config()
+    bot_token = config.tg_bot.token
+    bot = Bot(token=bot_token)
+    dp = Dispatcher()
+    dp.include_router(main_router)
+    await dp.start_polling(bot)
 
-if __name__ == '__main__':
-    dp.run_polling(bot)
+
+asyncio.run(main())
