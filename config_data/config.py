@@ -18,6 +18,6 @@ def load_config(path: str | None = None) -> Config:
 
     return Config(
         tg_bot=TgBot(
-            token=env('TOKEN')
+            token=env.str('TOKEN')
         )
     )

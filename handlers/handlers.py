@@ -12,7 +12,7 @@ async def process_start_command(message: Message):
         LEXICON['start'])
 
 
-@main_router.message(CommandStart())
+@main_router.message(Command(commands='help'))
 async def process_help_command(message: Message):
     await message.answer(
         LEXICON['help']

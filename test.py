@@ -1,7 +1,7 @@
 import requests
 from pdf2image import convert_from_bytes, convert_from_path
 
-from yolo import yolo_predict
+from yolo.yolo import yolo_predict
 
 # Вставьте ваш токен бота
 TOKEN = '7489469462:AAGCJ3zmSAH9fy0ctSCHEskpBy9MAT4wpWE'
