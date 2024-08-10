@@ -1,10 +1,9 @@
 import asyncio
 import logging
 
-from aiogram import Bot, Dispatcher
-
-from config_data.config import Config, load_config
 from handlers.handlers import main_router
+from keyboards.set_menu import set_main_menu
+from bot_init import dp, bot
 
 logger = logging.getLogger(__name__)
 
@@ -18,12 +17,13 @@ async def main():
 
     logger.info('Starting bot')
 
-    config: Config = load_config()
-    bot_token = config.tg_bot.token
-    bot = Bot(token=bot_token)
-    dp = Dispatcher()
     dp.include_router(main_router)
+    await set_main_menu(bot)
     await dp.start_polling(bot)
 
 
-asyncio.run(main())
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except (KeyboardInterrupt, SystemExit):
+        logger.info("Bot stopped.")
