@@ -10,25 +10,21 @@ _classes = {
     3.0: 'Даты'
 }
 
-counter = Counter()
-
-_model = YOLO('./services/best (1).pt', task='detect')
+_model = YOLO('./services/best.pt', task='detect')
 
 
 def yolo_predict(image):
-    results = _model(image, save=False, conf=0.2, verbose=False)
+    result_key = 'all_right'
+    results = _model(image, save=False, conf=0.7, verbose=False)
     for numb, result in enumerate(results, start=1):
-        boxes = result.boxes  # Получаем объект Boxes
-        # Извлекаем координаты прямоугольников, классы и вероятности
+        boxes = result.boxes
         coordinates = boxes.xyxy  # Координаты прямоугольников
         classes = boxes.cls  # Классы объектов
         scores = boxes.conf  # Вероятности классов
-        answers = []
         c = Counter(classes.tolist())
-
+        print(f"Страница{numb}, {classes}, {scores}")
         if c[0] != 2 or c[1] != 2:
+            result_key = 'not_all_right'
             yield f"Страница {numb}, печатей {c[0]}, подписей {c[1]}"
-        # for cls, score in zip(c, scores):
-        #     cls = cls.item()
-        #     answers.append(f"{_classes[cls]} есть с вероятностью {score}!")
-    yield f"{LEXICON_YOLO['end']}"
+
+    yield f"{LEXICON_YOLO[result_key]}"

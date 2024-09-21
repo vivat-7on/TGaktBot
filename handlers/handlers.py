@@ -1,6 +1,6 @@
 from aiogram import Router, F
 from aiogram.filters import Command, CommandStart
-from aiogram.types import Message
+from aiogram.types import input_file, Message
 from pdf2image import convert_from_bytes
 
 from bot_init import bot
@@ -12,8 +12,10 @@ main_router = Router()
 
 @main_router.message(CommandStart())
 async def process_start_command(message: Message):
-    await message.answer(
-        LEXICON['start'])
+    photo_path = 'files/base.png'
+    photo = input_file.FSInputFile(photo_path)
+    await message.answer(LEXICON['start'])
+    await message.answer_photo(photo=photo)
 
 
 @main_router.message(Command(commands='help'))
