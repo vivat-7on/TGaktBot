@@ -5,7 +5,7 @@ from pdf2image import convert_from_bytes
 
 from bot_init import bot
 from lexicon.lexicon_ru import LEXICON
-from services.yolo import yolo_predict
+from services.yolo import predict_processing, yolo_predicts
 
 main_router = Router()
 
@@ -31,13 +31,16 @@ async def send_files(message: Message):
     file = message.document
     file_id = file.file_id
     file_info = await bot.get_file(file_id)
-    downloaded_file = await bot.download_file(file_info.file_path)
+    downloaded_file = await bot.download_file(
+        file_info.file_path,
+        timeout=120,
+        chunk_size=1024,
+    )
     file_bytes = downloaded_file.read()
-    # images = convert_from_bytes(file_bytes)
-    # for image in images:
-    results = yolo_predict(convert_from_bytes(file_bytes))
-    for resul in results:
-        await message.answer(resul)
+    predicts = yolo_predicts(convert_from_bytes(file_bytes))
+    results = predict_processing(predicts)
+    for result in results:
+        await message.answer(result)
 
 
 @main_router.message()
