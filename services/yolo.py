@@ -28,7 +28,7 @@ def load_model(weights_path: str = './services/best.pt',
 
 def yolo_predicts(model: YOLO, list_bytes: List[bytes],
                   conf_threshold: float = 0.7) -> Optional[List]:
-    """Получает предсказания от модели YOLO. Логирует ошибки."""
+    """Получает предсказания от модели YOLO."""
     try:
         logging.info("Получение предсказаний от модели YOLO...")
         predicts = model(list_bytes, save=False, conf=conf_threshold,
@@ -44,7 +44,7 @@ def yolo_predicts(model: YOLO, list_bytes: List[bytes],
 
 
 def _answer_for_yolo(page_number: int, predict) -> Optional[str]:
-    """Генерирует строку с информацией о количестве классов на странице."""
+    """Генерирует строку с информацией об ошибках заполнения актов."""
     try:
         classes = predict.boxes.cls
         counts = Counter(classes.tolist())
@@ -63,7 +63,7 @@ def _answer_for_yolo(page_number: int, predict) -> Optional[str]:
 
 
 def predict_processing(predicts: Optional[List]) -> Generator[str, None, None]:
-    """Обрабатывает предсказания и генерирует результаты. Логирует ошибки."""
+    """Обрабатывает предсказания и генерирует результаты."""
     if predicts is None:
         logging.warning("Пустой список предсказаний. Завершаем обработку.")
         yield "Ошибка: предсказания отсутствуют."
@@ -75,6 +75,6 @@ def predict_processing(predicts: Optional[List]) -> Generator[str, None, None]:
         answer = _answer_for_yolo(page_number, predict)
         if answer:
             result_key = 'not_all_right'
-            yield answer  # Отправляем ответ по мере его обработки
+            yield answer
 
     yield LEXICON_YOLO.get(result_key, "Ошибка: ключ результата не найден")
