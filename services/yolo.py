@@ -4,7 +4,6 @@ from ultralytics import YOLO
 
 from lexicon.lexicon_ru import LEXICON_YOLO
 
-
 _model = YOLO('./services/best.pt', task='detect')
 
 
@@ -16,8 +15,8 @@ def yolo_predicts(list_bytes):
 def _answer_for_yolo(page_number, predict):
     classes = predict.boxes.cls
     c = Counter(classes.tolist())
-    if c[0] != 2 or c[1] != 2:
-        return f"Страница {page_number}, печатей {c[0]}, подписей {c[1]}"
+    if c[0] != 2 or c[1] != 2 or c[2] < 1:
+        return f"Страница {page_number}, печатей {c[0]}, подписей {c[1]}, дат {c[2]}"
 
 
 def predict_processing(predicts):
