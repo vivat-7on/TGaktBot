@@ -21,3 +21,18 @@ LEXICON_COMMANDS: dict[str, str] = {
     '/support': 'написать в поддержку',
     '/contacts': 'контакты для связи'
 }
+
+LEXICON_YOLO_LOGGING = {
+    'yolo_start_load': 'Загрузка модели YOLO...',
+    'yolo_loaded': 'Модель YOLO успешно загружена.',
+    'yolo_start_predicts': 'Получение предсказаний от модели YOLO...',
+    'yolo_none_predict': 'Модель не вернула предсказаний.',
+    'yolo_get_predict': 'Предсказания успешно получены.',
+    'yolo_predict_empty': 'Пустой список предсказаний. Завершаем обработку.',
+}
+
+LEXICON_YOLO_ERROR = {
+    'yolo_load_err': 'Ошибка при загрузке модели: ',
+    'yolo_predict_err': 'Ошибка при получении предсказаний: ',
+    'yolo_predict_empty_err': 'Ошибка: предсказания отсутствуют.'
+}

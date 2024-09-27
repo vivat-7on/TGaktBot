@@ -1,7 +1,11 @@
 import logging
 from collections import Counter
 from ultralytics import YOLO
-from lexicon.lexicon_ru import LEXICON_YOLO
+from lexicon.lexicon_ru import (
+    LEXICON_YOLO,
+    LEXICON_YOLO_LOGGING,
+    LEXICON_YOLO_ERROR,
+)
 from typing import List, Generator, Optional
 
 SEAL_CLASS = 0.0
@@ -16,13 +20,13 @@ def load_model(weights_path: str = './services/best.pt',
                task: str = 'detect') -> Optional[YOLO]:
     """Загружает и возвращает модель YOLO"""
     try:
-        logging.info("Загрузка модели YOLO...")
-        model = YOLO(weights_path, task='detect')
-        logging.info("Модель YOLO успешно загружена.")
+        logging.info(LEXICON_YOLO_LOGGING['yolo_start_load'])
+        model = YOLO(weights_path, task)
+        logging.info(LEXICON_YOLO_LOGGING['yolo_loaded'])
         return model
 
     except Exception as e:
-        logging.error(f"Ошибка при загрузке модели: {e}")
+        logging.error(f"{LEXICON_YOLO_ERROR['yolo_load_err']}{e}")
         return None
 
 
@@ -30,16 +34,16 @@ def yolo_predicts(model: YOLO, list_bytes: List[bytes],
                   conf_threshold: float = 0.7) -> Optional[List]:
     """Получает предсказания от модели YOLO."""
     try:
-        logging.info("Получение предсказаний от модели YOLO...")
+        logging.info(LEXICON_YOLO_LOGGING['yolo_start_predicts'])
         predicts = model(list_bytes, save=False, conf=conf_threshold,
                          verbose=False)
         if not predicts:
-            logging.warning("Модель не вернула предсказаний.")
+            logging.warning(LEXICON_YOLO_LOGGING['yolo_none_predict'])
             return None
-        logging.info("Предсказания успешно получены.")
+        logging.info(LEXICON_YOLO_LOGGING['yolo_get_predict'])
         return predicts
     except Exception as e:
-        logging.error(f"Ошибка при получении предсказаний: {e}")
+        logging.error(f"{LEXICON_YOLO_ERROR['yolo_predict_err']} {type(e)}")
         return None
 
 
@@ -65,8 +69,8 @@ def _answer_for_yolo(page_number: int, predict) -> Optional[str]:
 def predict_processing(predicts: Optional[List]) -> Generator[str, None, None]:
     """Обрабатывает предсказания и генерирует результаты."""
     if predicts is None:
-        logging.warning("Пустой список предсказаний. Завершаем обработку.")
-        yield "Ошибка: предсказания отсутствуют."
+        logging.warning(LEXICON_YOLO_LOGGING['yolo_predict_empty'])
+        yield LEXICON_YOLO_ERROR['yolo_predict_empty_err']
         return
 
     result_key = 'all_right'
