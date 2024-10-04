@@ -1,4 +1,4 @@
-<img width="1040" alt="image_bot" src="https://github.com/user-attachments/assets/2f5844de-75e3-4c63-9346-cb6c4c4ef3eb">
+![CheckDockAI_git](https://github.com/user-attachments/assets/7afa470d-bedc-406a-88b2-d180f6933f8c)
 
 
 [![Python3.10](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
