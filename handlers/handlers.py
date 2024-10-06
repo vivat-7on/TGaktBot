@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from aiogram import Router, F
 from aiogram.filters import Command, CommandStart
@@ -56,7 +57,7 @@ async def send_files(message: Message):
             await message.answer(LEXICON_HANDLERS_ERROR['default_answer'])
             return
         logging.info(LEXICON_HANDLERS_LOGGING['getting_predictions'])
-        predicts = yolo_predicts(model, list_bytes)
+        predicts = await asyncio.to_thread(yolo_predicts, model, list_bytes)
         if predicts is None:
             logging.warning(LEXICON_HANDLERS_LOGGING['failed_predictions'])
             await message.answer(LEXICON_HANDLERS_ERROR['default_answer'])
