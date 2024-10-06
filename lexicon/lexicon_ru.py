@@ -36,3 +36,17 @@ LEXICON_YOLO_ERROR = {
     'yolo_predict_err': 'Ошибка при получении предсказаний: ',
     'yolo_predict_empty_err': 'Ошибка: предсказания отсутствуют.'
 }
+
+LEXICON_HANDLERS_LOGGING = {
+    'get_doc': 'Получен документ от пользователя',
+    'loading_file': 'Загрузка файла',
+    'convert_file': 'Конвертация файла {} в изображения...',
+    'failed_load_yolo': 'Не удалось загрузить модель YOLO.',
+    'getting_predictions': 'Получение предсказаний от модели YOLO...',
+    'failed_predictions': 'Модель не вернула предсказаний.',
+}
+
+LEXICON_HANDLERS_ERROR = {
+    'default_answer': 'Не фартонуло( Попробуйте загрузить файл ещё раз.',
+    'doc_processing_err': 'Произошла ошибка при обработке вашего документа. Пожалуйста, попробуйте снова.'
+}
